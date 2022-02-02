@@ -1,0 +1,84 @@
+question 1
+
+10 * 10^6 bit par seconde
+51.2 * 10^-6 seconde de délai
+
+vitesse = taille / temps <=> taille = vitesse * temps
+									= 10 * 10^6 * 51.2 * 10^-6
+									= 512 bits
+									= 64 octets
+									
+									
+question 2
+
+vitesse de l'électricité = 2 * 10^8 m/s
+vitesse des paquets = 100 * 10^6 bits/s
+taille min d'un paquet = 512 bits
+
+vitesse des paquets = taille des paquets / temps de transmission <=> temps de transmission = taille des paquets / vitesse des paquets
+																						   = 512 / 100 * 10^6
+																						   = 51.2 * 10^6 bits/seconde
+
+temps de transmission = 51.2 * 10^6 bits/seconde
+
+vitesse de l'électricité = distance / temps de transmission <=> distance = vitesse de l'électricité * temps de transmission
+																		 = 2 * 10^8 * 51.2 * 10^6
+																		 = 102.4 * 10^14 m
+																		 
+on divise par 2 car aller retour : distance = 51.2 * 10^14 m
+
+
+question 3
+
+temps d'attente après c collision est noté Tb et vaut TS * k, avec k un nombre aléatoire de l'intervalle [0, 2^c - 1].
+en 3 collisions, Tb vaut TS * k, avec k dans l'intervalle [0, 2^3 - 1] = [0, 7] ; valeur moyenne de k = 3.5, donc valeur moyenne de Tb est 3.5 * TS
+en généralisant avec N collisions, Tb vaut en moyenne TS * ((2^N - 1) / 2)
+
+
+question 4
+
+x = 10 * log10(P/P0) <=> x / 10 = log10(P/P0)
+					 <=> 10^(x / 10) = P/P0
+					 <=> (10^(x / 10)) * P0 = P
+					 <=> (10^(20 / 10)) * 1 = P
+					 <=> 10^2 = P
+					 
+donc P = 100 mW
+
+
+question 5
+
+formule de base : vitesse de transmission = longueur des trames / temps d'un cycle
+longueur des trames est une donnée de l'exo : d'abord 200B, puis 1500B.
+on doit calculer le temps d'un cycle. On le note Tcycle
+voir slide 31 du diapo de cours pour détails des étapes.
+voir slide 33 du diapo de cours pour les formules (pas du par coeur, elles sont logiques, si on se réfère au slide 31)
+
+on considère pour l'instant qu'il n'y a pas de RTS ni de CTS.
+
+Tcycle = Tdifs + Tdata + Tsifs + Tack  		// Tdifs et Tsifs sont des constantes, données dans l'exo.
+
+Tdata = Tphy+pre + Th_data + Td_data 		// Tphy+pre est donné dans l'énoncé, c'est une constante, Th_data = temps d'envoi des headers de data, Td_data = temps d'envoi des (vraies) données de data
+Th_data = 28 * 8 / (54 * 10^6)
+Td_data = 200 * 8 / (54 * 10^6)
+on peut factoriser : Th_data + Td_data = ((28 + 200) * 8) / (54 * 10^6)
+
+Tack = Tphy+pre + Td_ack 			// globalement la même chose, sans header
+Td_ack = 14 * 8 / (54 * 10^6)
+
+on a tout pour calculer Tdata = Tphy+pre + Th_data + Td_data :
+Tdata = Tphy+pre + Th_data + Td_data
+	  = 20 * 10^-6 + ((28 + 200) * 8) / (54 * 10^6) s
+	 
+de même pour Tack = Tpre + Tphy + Td_ack :
+Tack = Tpre + Tphy + Td_ack
+	 = 20 * 10^-6 + 14 * 8 / (54 * 10^6) s
+	 
+et là on a tout pour calculer Tcycle = Tdifs + Tdata + Tsifs + Tack :
+Tcycle = Tdifs + Tdata + Tsifs + Tack
+	   = 28 * 10^-6 + 20 * 10^-6 + ((28 + 200) * 8) / (54 * 10^6) + 10 * 10^-6 + 20 * 10^-6 + 14 * 8 / (54 * 10^6)
+	   = (3074 / 27) * 10^-6 s
+	   = environ 113 * 10^-6 s
+	   = environ 113 µs
+	   
+seconde partie : rajouter le RTS/CTS, en appliquant le même raisonnement 
